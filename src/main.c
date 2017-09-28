@@ -47,12 +47,19 @@ int main(void) {
 	DHT11initTIM2();
 
 	/* Put string to USART */
-	btSend("STM32F411E-DISCO Weather Station\n\r");
+	btSend("STM32F411E-DISCO Weather Station");
+
 	while (1) {
 		DHT11Read(&Rh, &RhDec, &Temp, &TempDec, &ChkSum);
 	}
 }
 
 void btSend(char* text) {
-	TM_USART_Puts(USART1, text);
+	const char* carriageReturn = "\r\n";
+	char buff[40] = {0};
+
+	strcpy(buff, text);
+	strcat(buff, carriageReturn);
+
+	TM_USART_Puts(USART1, buff);
 }
