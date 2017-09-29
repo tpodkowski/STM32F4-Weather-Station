@@ -10,32 +10,35 @@
 
 
 #include "stm32f4xx.h"
-#include "defines.h"
-#include "misc.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_rcc.h"
+#include "stm32f4xx_tim.h"
 
 #include "tm_stm32f4_gpio.h"
 #include "tm_stm32f4_disco.h"
 #include "tm_stm32f4_usart.h"
-//#include "tm_stm32f4_rcc.h"
 #include "tm_stm32f4_delay.h"
+
+#include "defines.h"
+#include "misc.h"
 #include "dht11.h"
 
-
-	/* Private variables */
-	u8 Rh;
-	u8 RhDec;
-	u8 Temp;
-	u8 TempDec;
-	u8 ChkSum;
-
+/* Private functions declaration */
 void btSend(char* text);
+
+/* Private variables */
+u8 Rh;
+u8 RhDec;
+u8 Temp;
+u8 TempDec;
+u8 ChkSum;
 
 int main(void) {
 
 	/* Initialize system */
 	SystemInit();
 
-	TM_GPIO_Init(GPIOC, GPIO_PIN_1, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_High);
+	TM_GPIO_Init(GPIOC, GPIO_PIN_1, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Low);
 	TM_GPIO_SetPinHigh(GPIOC, GPIO_PIN_1);
 
 	/* Initialize TM Libs */
@@ -46,11 +49,15 @@ int main(void) {
 	/* Initialize TIM2 for DHT11 */
 	DHT11initTIM2();
 
-	/* Put string to USART */
-	btSend("STM32F411E-DISCO Weather Station");
-
 	while (1) {
-		DHT11Read(&Rh, &RhDec, &Temp, &TempDec, &ChkSum);
+//		DHT11Read(&Rh, &RhDec, &Temp, &TempDec, &ChkSum);
+
+        if (TIM_GetCounter(TIM2) < 30) {
+        	TM_DISCO_LedOn(LED_BLUE);
+        	btSend("STM32F411E-DISCO Weather Station");
+        } else {
+        	TM_DISCO_LedOff(LED_BLUE);
+        }
 	}
 }
 
@@ -63,3 +70,4 @@ void btSend(char* text) {
 
 	TM_USART_Puts(USART1, buff);
 }
+

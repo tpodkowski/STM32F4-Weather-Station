@@ -30,13 +30,13 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: projektbezduszy.elf
+all: WeatherStation.elf
 
 # Tool invocations
-projektbezduszy.elf: $(OBJS) $(USER_OBJS) C:\Users\tpodk\workspace\projektbezduszy\LinkerScript.ld
+WeatherStation.elf: $(OBJS) $(USER_OBJS) C:\Users\tpodk\workspace\WeatherStation\LinkerScript.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T"C:\Users\tpodk\workspace\projektbezduszy\LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "projektbezduszy.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T"C:\Users\tpodk\workspace\WeatherStation\LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "WeatherStation.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -48,8 +48,8 @@ clean:
 
 post-build:
 	-@echo 'Generating binary and Printing size information:'
-	arm-none-eabi-objcopy -O binary "projektbezduszy.elf" "projektbezduszy.bin"
-	arm-none-eabi-size "projektbezduszy.elf"
+	arm-none-eabi-objcopy -O binary "WeatherStation.elf" "WeatherStation.bin"
+	arm-none-eabi-size "WeatherStation.elf"
 	-@echo ' '
 
 .PHONY: all clean dependents
