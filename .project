@@ -32,6 +32,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Desktop/DHT11/dht11.c</locationURI>
 		</link>
 		<link>
+			<name>src/TM/tm_stm32f4_am2301.c</name>
+			<type>1</type>
+			<location>D:/tm_stm32f4_all/tm_stm32f4_am2301.c</location>
+		</link>
+		<link>
 			<name>src/TM/tm_stm32f4_delay.c</name>
 			<type>1</type>
 			<location>D:/tm_stm32f4_all/tm_stm32f4_delay.c</location>

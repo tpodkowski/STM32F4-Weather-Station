@@ -42,6 +42,7 @@
 "StdPeriph_Driver/src/stm32f4xx_usart.o"
 "StdPeriph_Driver/src/stm32f4xx_wwdg.o"
 "src/DHT11/dht11.o"
+"src/TM/tm_stm32f4_am2301.o"
 "src/TM/tm_stm32f4_delay.o"
 "src/TM/tm_stm32f4_disco.o"
 "src/TM/tm_stm32f4_gpio.o"

@@ -8,6 +8,9 @@
   ******************************************************************************
 */
 
+#include <string.h>
+#include <stdio.h>
+#include <time.h>
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
@@ -24,44 +27,90 @@
 #include "dht11.h"
 
 /* Private functions declaration */
-void btSend(char* text);
+void bluetoothSend(char* text);
+void checkConditions(u8 temperature, u8 relativeHumidity);
+void heaterEnable();
+void heaterDisable();
+void fanEnable();
+void fanDisable();
 
-/* Private variables */
-u8 Rh;
-u8 RhDec;
-u8 Temp;
-u8 TempDec;
-u8 ChkSum;
 
 int main(void) {
+	u8 relativeHumidity;
+	u8 RhDec;
+	u8 temperature;
+	u8 TempDec;
+	u8 ChkSum;
+	char str[20];
+	u_int32_t ticksCounter = 1;
 
 	/* Initialize system */
 	SystemInit();
-
-	TM_GPIO_Init(GPIOC, GPIO_PIN_1, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Low);
-	TM_GPIO_SetPinHigh(GPIOC, GPIO_PIN_1);
+	SystemCoreClockUpdate();
 
 	/* Initialize TM Libs */
+	TM_GPIO_Init(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 , TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Low);
 	TM_DISCO_LedInit();
-	TM_DISCO_ButtonInit();
 	TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
 
-	/* Initialize TIM2 for DHT11 */
 	DHT11initTIM2();
 
 	while (1) {
-//		DHT11Read(&Rh, &RhDec, &Temp, &TempDec, &ChkSum);
+		ticksCounter++;
+		if (ticksCounter >= 100) {
+			ticksCounter = 1;
+		}
 
-        if (TIM_GetCounter(TIM2) < 30) {
-        	TM_DISCO_LedOn(LED_BLUE);
-        	btSend("STM32F411E-DISCO Weather Station");
-        } else {
-        	TM_DISCO_LedOff(LED_BLUE);
+        if (TIM_GetCounter(TIM2) < 4000 / ticksCounter) {
+        	DHT11Read(&relativeHumidity, &RhDec, &temperature, &TempDec, &ChkSum);
+
+        	if ((temperature < 100 || relativeHumidity < 100)) {
+        		checkConditions(temperature, relativeHumidity);
+        		sprintf(str, "Temp: %dC, Humidity: %dRh", temperature, relativeHumidity);
+        		bluetoothSend(str);
+        	}
         }
 	}
 }
 
-void btSend(char* text) {
+void checkConditions(u8 temperature, u8 relativeHumidity) {
+
+	if (temperature > 30 || relativeHumidity > 80) {
+		TM_DISCO_LedOff(LED_ALL);
+		TM_DISCO_LedOn(LED_RED);
+		fanEnable();
+		heaterDisable();
+	} else if (temperature > 25 || relativeHumidity > 65) {
+		TM_DISCO_LedOff(LED_ALL);
+		TM_DISCO_LedOn(LED_ORANGE);
+		fanDisable();
+		heaterDisable();
+	} else {
+		TM_DISCO_LedOff(LED_ALL);
+		TM_DISCO_LedOn(LED_GREEN);
+		fanDisable();
+		heaterEnable();
+	}
+}
+
+void heaterEnable() {
+	TM_GPIO_SetPinHigh(GPIOC, GPIO_PIN_0);
+}
+
+void heaterDisable() {
+	TM_GPIO_SetPinLow(GPIOC, GPIO_PIN_0);
+}
+
+void fanEnable() {
+	TM_GPIO_SetPinHigh(GPIOC, GPIO_PIN_1);
+}
+
+void fanDisable() {
+	TM_GPIO_SetPinLow(GPIOC, GPIO_PIN_1);
+}
+
+void bluetoothSend(char* text) {
+	TM_DISCO_LedOn(LED_BLUE);
 	const char* carriageReturn = "\r\n";
 	char buff[40] = {0};
 
@@ -69,5 +118,5 @@ void btSend(char* text) {
 	strcat(buff, carriageReturn);
 
 	TM_USART_Puts(USART1, buff);
+	TM_DISCO_LedOff(LED_BLUE);
 }
-
