@@ -1,4 +1,4 @@
-src/main.o: ../src/main.c \
+src/main.o: ../src/main.c D:/tm_stm32f4_all/tm_stm32f4_gpio.h \
  C:/Users/tpodk/workspace/WeatherStation/CMSIS/device/stm32f4xx.h \
  C:/Users/tpodk/workspace/WeatherStation/CMSIS/core/core_cm4.h \
  C:/Users/tpodk/workspace/WeatherStation/CMSIS/core/core_cmInstr.h \
@@ -27,15 +27,16 @@ src/main.o: ../src/main.c \
  C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/misc.h \
  C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_flash_ramfunc.h \
  C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_gpio.h \
- C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_rcc.h \
- C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_tim.h \
- D:/tm_stm32f4_all/tm_stm32f4_gpio.h D:/tm_stm32f4_all/defines.h \
- D:/tm_stm32f4_all/tm_stm32f4_disco.h D:/tm_stm32f4_all/tm_stm32f4_gpio.h \
- D:/tm_stm32f4_all/tm_stm32f4_usart.h \
+ D:/tm_stm32f4_all/defines.h D:/tm_stm32f4_all/tm_stm32f4_disco.h \
+ D:/tm_stm32f4_all/tm_stm32f4_gpio.h D:/tm_stm32f4_all/tm_stm32f4_usart.h \
  C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/misc.h \
+ C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_rcc.h \
  C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_usart.h \
  D:/tm_stm32f4_all/attributes.h D:/tm_stm32f4_all/tm_stm32f4_delay.h \
- D:/tm_stm32f4_all/defines.h C:/Users/tpodk/Desktop/DHT11/dht11.h
+ D:/tm_stm32f4_all/defines.h C:/Users/tpodk/Desktop/DHT11/dht11.h \
+ C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_tim.h
+
+D:/tm_stm32f4_all/tm_stm32f4_gpio.h:
 
 C:/Users/tpodk/workspace/WeatherStation/CMSIS/device/stm32f4xx.h:
 
@@ -93,12 +94,6 @@ C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_flash_ram
 
 C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_gpio.h:
 
-C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_rcc.h:
-
-C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_tim.h:
-
-D:/tm_stm32f4_all/tm_stm32f4_gpio.h:
-
 D:/tm_stm32f4_all/defines.h:
 
 D:/tm_stm32f4_all/tm_stm32f4_disco.h:
@@ -109,6 +104,8 @@ D:/tm_stm32f4_all/tm_stm32f4_usart.h:
 
 C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/misc.h:
 
+C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_rcc.h:
+
 C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_usart.h:
 
 D:/tm_stm32f4_all/attributes.h:
@@ -118,3 +115,5 @@ D:/tm_stm32f4_all/tm_stm32f4_delay.h:
 D:/tm_stm32f4_all/defines.h:
 
 C:/Users/tpodk/Desktop/DHT11/dht11.h:
+
+C:/Users/tpodk/workspace/WeatherStation/StdPeriph_Driver/inc/stm32f4xx_tim.h:

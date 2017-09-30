@@ -12,11 +12,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "stm32f4xx.h"
-#include "stm32f4xx_gpio.h"
-#include "stm32f4xx_rcc.h"
-#include "stm32f4xx_tim.h"
-
 #include "tm_stm32f4_gpio.h"
 #include "tm_stm32f4_disco.h"
 #include "tm_stm32f4_usart.h"
@@ -42,7 +37,6 @@ int main(void) {
 	u8 TempDec;
 	u8 ChkSum;
 	char str[20];
-	u_int32_t ticksCounter = 1;
 
 	/* Initialize system */
 	SystemInit();
@@ -51,25 +45,21 @@ int main(void) {
 	/* Initialize TM Libs */
 	TM_GPIO_Init(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 , TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Low);
 	TM_DISCO_LedInit();
+	TM_DELAY_Init();
 	TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
 
 	DHT11initTIM2();
 
 	while (1) {
-		ticksCounter++;
-		if (ticksCounter >= 100) {
-			ticksCounter = 1;
+		DHT11Read(&relativeHumidity, &RhDec, &temperature, &TempDec, &ChkSum);
+
+		if ((temperature < 100 || relativeHumidity < 100)) {
+			checkConditions(temperature, relativeHumidity);
+			sprintf(str, "Temp: %dC, Humidity: %dRh", temperature, relativeHumidity);
+			bluetoothSend(str);
 		}
 
-        if (TIM_GetCounter(TIM2) < 4000 / ticksCounter) {
-        	DHT11Read(&relativeHumidity, &RhDec, &temperature, &TempDec, &ChkSum);
-
-        	if ((temperature < 100 || relativeHumidity < 100)) {
-        		checkConditions(temperature, relativeHumidity);
-        		sprintf(str, "Temp: %dC, Humidity: %dRh", temperature, relativeHumidity);
-        		bluetoothSend(str);
-        	}
-        }
+		Delayms(1000);
 	}
 }
 
@@ -119,4 +109,8 @@ void bluetoothSend(char* text) {
 
 	TM_USART_Puts(USART1, buff);
 	TM_DISCO_LedOff(LED_BLUE);
+}
+
+void TM_DELAY_1msHandler() {
+//	TM_DISCO_LedOn(LED_ALL);
 }
