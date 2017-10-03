@@ -59,7 +59,7 @@ int main(void) {
 			bluetoothSend(str);
 		}
 
-		Delayms(1000);
+		Delayms(20000);
 	}
 }
 
